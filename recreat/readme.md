@@ -13,7 +13,7 @@ in the Trade Credit Market It provides a framework for simulating different scen
 - `main.py`: The main script to run different scenarios, perform calculations, optimize the network, and visualize the results.
 
 
-`bash
+### `bash
 
 python main.py
 
@@ -36,5 +36,8 @@ Efficiency Matrix (E): Measures the efficiency of each company's debt relative t
 Stability Coefficient: Indicates the stability of each company by comparing incoming and outgoing debts.
 
 
+- `scenario.py`: There is three scenarios used to instantiate and debug.
 
+- `visualize.py`: [`networkx`](https://networkx.org/) is used to visualize the relationship of companies.
+- `main.py` main 
 
