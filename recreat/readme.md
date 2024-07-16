@@ -20,4 +20,21 @@ python main.py
 
 ## Project Explain
 - `company.py`:  In this part, [`uuid`](https://docs.python.org/3/library/uuid.html) (`uuid4`) is used to ensure the universally unique identifiers of the company.
+- `optimizer.py`: Using the Liquidity-Saving Mechanisms (LSMs) and implementations similar with TETRIS Core Technologies (TCT) algorithm, there are the logs and implements.
+- `calculations.py`:  several key coefficients：
+
+Nominal Liabilities Matrix (L): Represents the total debts among companies.
+
+Total Debt and Credit: Calculates the total debt and credit for each company.
+
+Net Positions: Computes the net position (total credit minus total debt) for each company.
+
+Net Internal Debt (NID): Calculates the minimum external funding required to clear all debts.
+
+Efficiency Matrix (E): Measures the efficiency of each company's debt relative to their total debt.
+
+Stability Coefficient: Indicates the stability of each company by comparing incoming and outgoing debts.
+
+
+
 
