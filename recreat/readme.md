@@ -39,5 +39,8 @@ Stability Coefficient: Indicates the stability of each company by comparing inco
 - `scenario.py`: There is three scenarios used to instantiate and debug.
 
 - `visualize.py`: [`networkx`](https://networkx.org/) is used to visualize the relationship of companies.
-- `main.py` main 
+  
+- `main.py`： Included main function and Records of the process.
+
+
 
