@@ -1,6 +1,8 @@
 from scenario import SimpleCycleScenario, ChainScenario, MixedScenario
 from visualize import visualize_network
 from calculations import NetworkCalculations
+from optimizer import LSMOptimizer
+
 
 def run_scenario(scenario):
     print(f"Running scenario: {scenario.name}")
@@ -16,42 +18,52 @@ def run_scenario(scenario):
     calculations.print_nominal_liabilities_matrix()
 
     # Print total debt and credit
-    total_debt, total_credit = calculations.get_total_debt_and_credit()
-    print("Total Debt:", total_debt)
-    print("Total Credit:", total_credit)
+    calculations.print_total_debt_and_credit()
 
     # Print net positions
-    net_positions = calculations.get_net_positions()
-    print("Net Positions:", net_positions)
+    calculations.print_net_positions()
 
     # Print net internal debt
-    net_internal_debt = calculations.get_net_internal_debt()
-    print("Net Internal Debt:", net_internal_debt)
+    calculations.print_net_internal_debt()
 
     # Print efficiency matrix
-    efficiency_matrix, _ = calculations.get_efficiency_matrix()
-    print("Efficiency Matrix:")
-    print(efficiency_matrix)
+    calculations.print_efficiency_matrix()
 
     # Print stability coefficient
-    stability_coefficient, _ = calculations.get_stability_coefficient()
-    print("Stability Coefficient:", stability_coefficient)
+    calculations.print_stability_coefficient()
 
-    # Optimize and print optimization results
-    calculations.print_optimization_results()
 
     # Visualize network
     visualize_network(network)
 
+    # Print optimization records
+    optimizer = LSMOptimizer(network)
+    optimizer.optimize() 
+    calculations.print_optimization_results()
+    print_optimization_records(optimizer) 
+
+def print_optimization_records(optimizer):
+    records = optimizer.get_optimization_records()
+    print("\nOptimization Records:")
+    for record in records:
+        print(f"Cycle: {record['cycle']}")
+        print(f"Edges: {record['edges']}")
+        print(f"Minimum debt in cycle: {record['min_debt']}")
+        print("")
+
+
+
+
 def main():
     scenarios = [
-        SimpleCycleScenario("Simple Cycle"),
-        ChainScenario("Chain Scenario"),
+#        SimpleCycleScenario("Simple Cycle"),
+#        ChainScenario("Chain Scenario"),
         MixedScenario("Mixed Scenario")
     ]
     
     for scenario in scenarios:
         run_scenario(scenario)
+
 
 if __name__ == "__main__":
     main()
