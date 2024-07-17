@@ -11,6 +11,7 @@ class LSMOptimizer:
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
         self.logger.setLevel(logging.INFO)
+        self.optimization_records = []
 
     def optimize(self):
         G = nx.DiGraph()
@@ -24,8 +25,12 @@ class LSMOptimizer:
         # Find all cycles in the graph
         cycles = list(nx.simple_cycles(G))
 
-        # Log initial cycles
-        self.logger.info(f"Initial cycles found: {cycles}")
+        # Log initial cycles with company names
+        cycles_with_names = [
+            [self.network.get_company_name_by_id(node) for node in cycle]
+            for cycle in cycles
+        ]
+        self.logger.info(f"Initial cycles found: {cycles_with_names}")
 
         # Remove cycles and optimize
         for cycle in cycles:
@@ -38,10 +43,23 @@ class LSMOptimizer:
         # Find the minimum debt in the cycle
         edges_in_cycle = [(u, v) for u, v in zip(cycle, cycle[1:] + [cycle[0]]) if G.has_edge(u, v)]
         min_debt = min(G[u][v]['weight'] for u, v in edges_in_cycle)
+        cycle_names = [self.network.get_company_name_by_id(node) for node in cycle]
+        edges_in_cycle_names = [(self.network.get_company_name_by_id(u), self.network.get_company_name_by_id(v)) for u, v in edges_in_cycle]
 
-        # Log the optimization details
-        self.logger.info(f"Optimizing cycle: {cycle}")
-        self.logger.info(f"Edges in cycle: {edges_in_cycle}")
+        self.optimization_records.append({
+            'cycle': cycle_names,
+            'edges': edges_in_cycle_names,
+            'min_debt': min_debt,
+        })
+
+        # Log the optimization details with company names
+        cycle_names = [self.network.get_company_name_by_id(node) for node in cycle]
+        edges_in_cycle_names = [
+            (self.network.get_company_name_by_id(u), self.network.get_company_name_by_id(v))
+            for u, v in edges_in_cycle
+        ]
+        self.logger.info(f"Optimizing cycle: {cycle_names}")
+        self.logger.info(f"Edges in cycle: {edges_in_cycle_names}")
         self.logger.info(f"Minimum debt in cycle: {min_debt}")
 
         # Reduce all debts in the cycle by the minimum debt
@@ -50,7 +68,11 @@ class LSMOptimizer:
 
         # Remove edges with weight zero
         edges_to_remove = [(u, v) for u, v in edges_in_cycle if G[u][v]['weight'] == 0]
-        self.logger.info(f"Removing edges with zero weight: {edges_to_remove}")
+        edges_to_remove_names = [
+            (self.network.get_company_name_by_id(u), self.network.get_company_name_by_id(v))
+            for u, v in edges_to_remove
+        ]
+        self.logger.info(f"Removing edges with zero weight: {edges_to_remove_names}")
         G.remove_edges_from(edges_to_remove)
 
     def _update_network(self, G):
@@ -68,12 +90,15 @@ class LSMOptimizer:
                 from_company.add_debt(v, amount)
                 to_company.add_credit(u, amount)
 
-        # Log the updated network
+        # Log the updated network with company names
         self.logger.info("Updated network:")
         for company in self.network.companies.values():
             self.logger.info(f"Company: {company.name} (ID: {company.id})")
-            self.logger.info(f"  Debtors: {company.debtors}")
-            self.logger.info(f"  Creditors: {company.creditors}")
+            self.logger.info(f"  Debtors: { {self.network.get_company_name_by_id(debtor): amount for debtor, amount in company.debtors.items()} }")
+            self.logger.info(f"  Creditors: { {self.network.get_company_name_by_id(creditor): amount for creditor, amount in company.creditors.items()} }")
             self.logger.info(f"  Total Debt: {sum(company.debtors.values())}")
             self.logger.info(f"  Total Credit: {sum(company.creditors.values())}")
             self.logger.info(f"  Net Position: {sum(company.creditors.values()) - sum(company.debtors.values())}")
+
+    def get_optimization_records(self):
+        return self.optimization_records
