@@ -18,7 +18,7 @@ in the Trade Credit Market It provides a framework for simulating different scen
 python main.py
 
 
-## Project Explain
+## Program Explain
 - `company.py`:  In this part, [`uuid`](https://docs.python.org/3/library/uuid.html) (`uuid4`) is used to ensure the universally unique identifiers of the company.
 - `optimizer.py`: Using the Liquidity-Saving Mechanisms (LSMs) and implementations similar with TETRIS Core Technologies (TCT) algorithm, there are the logs and implements.
 - `calculations.py`:  several key coefficients：
