@@ -8,7 +8,7 @@ in the Trade Credit Market It provides a framework for simulating different scen
 - `company.py`: Defines the `Company` and `DebtNetwork` classes for managing (Add, delete, check and change.) companies and their debt relationships.
 - `optimizer.py`: Implements for optimizing debt cycles in the network.
 - `calculations.py`: Provides various methods for calculating financial metrics and parameters based on the debt network.
-- `scenario.py`: Defines different scenarios for initializing the debt network with sample data.
+- `scenario.py`: Defines different scenarios for initializing the debt network with sample data. (This part should be database interface when we have some data set.)
 - `visualize.py`: Contains functions for visualizing the debt network.
 - `main.py`: The main script to run different scenarios, perform calculations, optimize the network, and visualize the results.
 
