@@ -54,16 +54,52 @@ class NetworkCalculations:
 
     def print_nominal_liabilities_matrix(self):
         L, ids = self.get_nominal_liabilities_matrix()
+        names = [self.network.get_company_name_by_id(id_) for id_ in ids]
         n = len(ids)
         print("Nominal Liabilities Matrix L:")
+        print("       " + " ".join(f"{name:>10}" for name in names))
         for i in range(n):
-            row = " ".join(f"{int(L[i, j])}" for j in range(n))
+            row = " ".join(f"{int(L[i, j]):>10}" for j in range(n))
             total_debt = int(np.sum(L[i, :]))
-            print(f"{row} | {total_debt}")
-        print("-" * (2 * n + 3))
-        col_totals = " ".join(f"{int(np.sum(L[:, j]))}" for j in range(n))
-        print(f"{col_totals}")
-        print()
+            print(f"{names[i]:>10}: {row} | {total_debt}")
+        print("-" * (12 * (n + 1)))
+        col_totals = " ".join(f"{int(np.sum(L[:, j])):>10}" for j in range(n))
+        print(f"{'Total':>10}: {col_totals}")
+
+    def print_total_debt_and_credit(self):
+        total_debt, total_credit = self.get_total_debt_and_credit()
+        print("Total Debt and Credit:")
+        for company_id in total_debt.keys():
+            company_name = self.network.get_company_name_by_id(company_id)
+            print(f"{company_name}: Debt = {total_debt[company_id]}, Credit = {total_credit[company_id]}")
+
+    def print_net_positions(self):
+        net_positions = self.get_net_positions()
+        net_positions_with_names = self.network.convert_ids_to_names(net_positions)
+        print("Net Positions:")
+        for company_name, net_position in net_positions_with_names.items():
+            print(f"{company_name}: Net Position = {net_position}")
+
+    def print_net_internal_debt(self):
+        net_internal_debt = self.get_net_internal_debt()
+        print(f"Net Internal Debt: {net_internal_debt}")
+
+    def print_efficiency_matrix(self):
+        E, ids = self.get_efficiency_matrix()
+        names = [self.network.get_company_name_by_id(id_) for id_ in ids]
+        n = len(ids)
+        print("Efficiency Matrix E:")
+        print("       " + " ".join(f"{name:>10}" for name in names))
+        for i in range(n):
+            row = " ".join(f"{E[i, j]:>10.2f}" for j in range(n))
+            print(f"{names[i]:>10}: {row}")
+
+    def print_stability_coefficient(self):
+        stability_coefficient, ids = self.get_stability_coefficient()
+        print("Stability Coefficient:")
+        for i, company_id in enumerate(ids):
+            company_name = self.network.get_company_name_by_id(company_id)
+            print(f"{company_name}: Stability Coefficient = {stability_coefficient[i]}")
 
     def print_optimization_results(self):
         print("Before Optimization:")
