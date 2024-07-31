@@ -56,8 +56,8 @@ class DebtNetwork:
     def display_network(self):
         for company in self.companies.values():
             print(f"Company: {company.name} (ID: {company.id})")
-            print(f"  Debtors: {company.debtors}")
-            print(f"  Creditors: {company.creditors}")
+            print(f"  Debtors: {self.convert_ids_to_names(company.debtors)}")
+            print(f"  Creditors: {self.convert_ids_to_names(company.creditors)}")
             print(f"  Total Debt: {sum(company.debtors.values())}")
             print(f"  Total Credit: {sum(company.creditors.values())}")
             print(f"  Net Position: {sum(company.creditors.values()) - sum(company.debtors.values())}")
@@ -75,3 +75,9 @@ class DebtNetwork:
                     'net_position': sum(company.creditors.values()) - sum(company.debtors.values())
                 }
         return None
+
+    def get_company_name_by_id(self, company_id):
+        return self.companies[company_id].name if company_id in self.companies else None
+    
+    def convert_ids_to_names(self, id_dict):
+        return {self.get_company_name_by_id(k): v for k, v in id_dict.items()}
