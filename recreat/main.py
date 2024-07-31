@@ -58,7 +58,7 @@ def main():
     scenarios = [
 #        SimpleCycleScenario("Simple Cycle"),
 #        ChainScenario("Chain Scenario"),
-#        MixedScenario("Mixed Scenario")
+        MixedScenario("Mixed Scenario")
         ComplexScenario("Complex Scenario")  # Add the complex scenario here
     ]
     
