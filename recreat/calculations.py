@@ -5,6 +5,7 @@ from optimizer import LSMOptimizer
 class NetworkCalculations:
     def __init__(self, network: DebtNetwork):
         self.network = network
+        self.pre_optimization_network = None  # To store the state before optimization
 
     def get_nominal_liabilities_matrix(self):
         n = len(self.network.companies)
@@ -52,8 +53,9 @@ class NetworkCalculations:
             stability_coefficient[i] = in_sum / out_sum if out_sum > 0 else 0
         return stability_coefficient, ids
 
-    def print_nominal_liabilities_matrix(self):
-        L, ids = self.get_nominal_liabilities_matrix()
+    def print_nominal_liabilities_matrix(self, L=None, ids=None):
+        if L is None or ids is None:
+            L, ids = self.get_nominal_liabilities_matrix()
         names = [self.network.get_company_name_by_id(id_) for id_ in ids]
         n = len(ids)
         print("Nominal Liabilities Matrix L:")
@@ -73,8 +75,9 @@ class NetworkCalculations:
             company_name = self.network.get_company_name_by_id(company_id)
             print(f"{company_name}: Debt = {total_debt[company_id]}, Credit = {total_credit[company_id]}")
 
-    def print_net_positions(self):
-        net_positions = self.get_net_positions()
+    def print_net_positions(self, net_positions=None):
+        if net_positions is None:
+            net_positions = self.get_net_positions()
         net_positions_with_names = self.network.convert_ids_to_names(net_positions)
         print("Net Positions:")
         for company_name, net_position in net_positions_with_names.items():
@@ -101,12 +104,24 @@ class NetworkCalculations:
             company_name = self.network.get_company_name_by_id(company_id)
             print(f"{company_name}: Stability Coefficient = {stability_coefficient[i]}")
 
+    def save_pre_optimization_state(self):
+        """ Save the current state of the network before optimization. """
+        self.pre_optimization_network = {
+            "nominal_liabilities_matrix": self.get_nominal_liabilities_matrix(),
+            "net_positions": self.get_net_positions(),
+        }
+
+    def print_pre_optimization_results(self):
+        """ Print results saved before optimization. """
+        if self.pre_optimization_network:
+            print("Before Optimization:")
+            L, ids = self.pre_optimization_network["nominal_liabilities_matrix"]
+            self.print_nominal_liabilities_matrix(L, ids)
+            self.print_net_positions(self.pre_optimization_network["net_positions"])
+        else:
+            print("Pre-optimization data not available.")
+
     def print_optimization_results(self):
-        print("Before Optimization:")
-        self.print_nominal_liabilities_matrix()
-
-        optimizer = LSMOptimizer(self.network)
-        optimizer.optimize()
-
         print("After Optimization:")
         self.print_nominal_liabilities_matrix()
+        self.print_net_positions()
