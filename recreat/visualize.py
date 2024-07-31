@@ -15,4 +15,7 @@ def visualize_network(network):
     nx.draw(G, pos, with_labels=True, node_size=3000, node_color="lightblue", font_size=10, font_weight="bold", arrowsize=20)
     edge_labels = nx.get_edge_attributes(G, 'weight')
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8)
+    
+    plt.title("Debt Network")
+    plt.axis('off')  # Hide axis
     plt.show()
