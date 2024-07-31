@@ -1,4 +1,4 @@
-from scenario import SimpleCycleScenario, ChainScenario, MixedScenario
+from scenario import SimpleCycleScenario, ChainScenario, MixedScenario, ComplexScenario
 from visualize import visualize_network
 from calculations import NetworkCalculations
 from optimizer import LSMOptimizer
@@ -33,18 +33,18 @@ def run_scenario(scenario):
     calculations.print_stability_coefficient()
 
 
-    # Visualize network
-    visualize_network(network)
-
     # Print optimization records
     optimizer = LSMOptimizer(network)
     optimizer.optimize() 
     calculations.print_optimization_results()
     print_optimization_records(optimizer) 
 
+    # Visualize network
+    visualize_network(network)
+
 def print_optimization_records(optimizer):
     records = optimizer.get_optimization_records()
-    print("\nOptimization Records:")
+    print("\nRecords:")
     for record in records:
         print(f"Cycle: {record['cycle']}")
         print(f"Edges: {record['edges']}")
@@ -58,7 +58,8 @@ def main():
     scenarios = [
 #        SimpleCycleScenario("Simple Cycle"),
 #        ChainScenario("Chain Scenario"),
-        MixedScenario("Mixed Scenario")
+#        MixedScenario("Mixed Scenario")
+        ComplexScenario("Complex Scenario")  # Add the complex scenario here
     ]
     
     for scenario in scenarios:
