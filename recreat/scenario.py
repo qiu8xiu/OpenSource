@@ -46,3 +46,24 @@ class MixedScenario(Scenario):
         self.network.add_debt("Company C", "Company F", 350)
         self.network.add_debt("Company F", "Company B", 400)
         return self.network
+
+class ComplexScenario:
+    def __init__(self, name):
+        self.name = name
+
+    def initialize(self):
+        network = DebtNetwork()
+
+
+        # Adding debts
+        network.add_debt("Company A", "Company B", 200)
+        network.add_debt("Company A", "Company C", 300)
+        network.add_debt("Company B", "Company C", 150)
+        network.add_debt("Company B", "Company D", 100)
+        network.add_debt("Company C", "Company A", 250)
+        network.add_debt("Company C", "Company E", 400)
+        network.add_debt("Company D", "Company B", 100)
+        network.add_debt("Company D", "Company E", 150)
+        network.add_debt("Company E", "Company A", 350)
+
+        return network
